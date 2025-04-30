@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Howzatt! Cricket Scorekeeper - Setup</title>
+  <link rel="stylesheet" href="setup.css">
+</head>
+<body>
+  <div class="setup-container">
+    <h1>Cricket Match Setup</h1>
+    <form id="setupForm">
+      <label>Team 1 Name: <input type="text" id="team1" required></label><br>
+      <label>Team 2 Name: <input type="text" id="team2" required></label><br>
+      <label>Toss Winner:
+        <select id="tossWinner" required>
+          <option value="">Select</option>
+          <option value="team1">Team 1</option>
+          <option value="team2">Team 2</option>
+        </select>
+      </label><br>
+      <label>Toss Decision:
+        <select id="tossDecision" required>
+          <option value="">Select</option>
+          <option value="bat">Bat</option>
+          <option value="bowl">Bowl</option>
+        </select>
+      </label><br>
+      <button type="submit">Start Match</button>
+    </form>
+  </div>
+  <script src="score.js"></script>
+</body>
+</html>

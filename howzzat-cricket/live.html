@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Cricket Scoring</title>
+  <link rel="stylesheet" href="live.css">
+</head>
+<body>
+  <div class="live-container">
+    <h2 id="scoreHeader"></h2>
+    <div id="batterTable"></div>
+    <div id="bowlerSection"></div>
+    <div id="scoringButtons">
+      <button onclick="addRuns(0)">0</button>
+      <button onclick="addRuns(1)">1</button>
+      <button onclick="addRuns(2)">2</button>
+      <button onclick="addRuns(3)">3</button>
+      <button onclick="addRuns(4)">4</button>
+      <button onclick="addRuns(6)">6</button>
+      <button onclick="wicket()">Wicket</button>
+      <button onclick="runOut()">Run Out</button>
+      <button onclick="wide()">Wide</button>
+      <button onclick="noBall()">No Ball</button>
+      <button onclick="byes()">Byes</button>
+      <button onclick="legByes()">Leg Byes</button>
+    </div>    
+    <a href="scorecard.html" class="btn-link">Go to Scorecard</a>
+  </div>
+  <div id="runRates"></div>
+  <div id="commentaryFeed"></div>
+  <div id="runOutModal" style="display:none; position:fixed; top:30%; left:50%; transform:translate(-50%, -30%); background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:1000;">
+    <h3>Run Out</h3>
+    <label for="runOutRuns">Runs completed before run out:</label><br>
+    <input type="number" id="runOutRuns" value="0" min="0"><br><br>
+  
+    <label for="outBatterSelect">Which batsman was run out?</label><br>
+    <select id="outBatterSelect"></select><br><br>
+  
+    <label for="newBatterName">New batsman's name:</label><br>
+    <input type="text" id="newBatterName"><br><br>
+  
+    <button onclick="confirmRunOut()">Confirm</button>
+    <button onclick="closeRunOutModal()">Cancel</button>
+  </div>
+  <script src="score.js"></script>
+</body>
+</html>
