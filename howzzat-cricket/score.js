@@ -100,15 +100,24 @@ if (window.location.pathname.includes('live.html')) {
       current.freehit = false;
       current.runs += runs;
 
-      if (wide || noball || bye || legbye) {
+      if (wide || bye || legbye) {
         current.extras += runs;
         if(wide) {
           current.freehit = true;
         }
       }
+      else if(wicket){
+        current.balls++;
+        bowler.balls++;
+        striker.balls++;
+        description = `Wicket in FREE HIT!, Not Out!`
+      }
       else{
         striker.runs += runs;
         bowler.runs += runs;
+        current.balls++;
+        bowler.balls++;
+        striker.balls++;
       }
 
       const over = Math.floor(current.balls / 6);
@@ -137,10 +146,28 @@ if (window.location.pathname.includes('live.html')) {
       }
       
       // Extras logic
-      if (wide || noball || bye || legbye) {
+      if (wide || bye || legbye) {
         current.extras += runs;
       }
+      else if (noball){
+        striker.runs += runs;
+        bowler.runs += runs;
+        current.extras++;
+      }
       
+      // Wicket logic
+      if (wicket) {
+        striker.out = true;
+        current.wickets++;
+        bowler.wickets++;
+        
+        if (current.wickets < 10) {
+          const next = prompt("Enter Next Batsman Name:");
+          current.batsmen.push({ name: next, runs: 0, balls: 0, fours: 0, sixes: 0, out: false });
+          current.strikerIndex = current.batsmen.length - 1;
+        }
+      }
+
       // Over completion logic
       if (bowler.balls > 0 && bowler.balls % 6 === 0 && current.balls < match.overs * 6 && current.wickets < 10) {
         if (bowler.bool_maiden) bowler.maidens++;
@@ -153,19 +180,6 @@ if (window.location.pathname.includes('live.html')) {
       // Odd runs logic
       if (runs % 2 === 1) {
         [current.strikerIndex, current.nonStrikerIndex] = [current.nonStrikerIndex, current.strikerIndex];
-      }
-
-      // Wicket logic
-      if (wicket) {
-        striker.out = true;
-        current.wickets++;
-        bowler.wickets++;
-        
-        if (current.wickets < 10) {
-          const next = prompt("Enter Next Batsman Name:");
-          current.batsmen.push({ name: next, runs: 0, balls: 0, fours: 0, sixes: 0, out: false });
-          current.strikerIndex = current.batsmen.length - 1;
-        }
       }
 
       // Add commentary
@@ -332,7 +346,7 @@ if (window.location.pathname.includes('live.html')) {
     }
     
     const runs = parseInt(inputValue, 10);
-    handleBallEvent(runs+1, `${bowler.name} to ${striker.name}, No ball. FREE HIT Awarded.`, false, false, true);
+    handleBallEvent(runs, `${bowler.name} to ${striker.name}, No ball. FREE HIT Awarded.`, false, false, true);
     current.freehit = true;
   };
 
@@ -413,6 +427,15 @@ if (window.location.pathname.includes('live.html')) {
         }
       }
       
+      // Over completion logic
+      if (bowler.balls > 0 && bowler.balls % 6 === 0 && current.balls < match.overs * 6 && current.wickets < 10) {
+        if (bowler.bool_maiden) bowler.maidens++;
+        bowler.bool_maiden = true;
+        getBowler();
+        [current.strikerIndex, current.nonStrikerIndex] = [current.nonStrikerIndex, current.strikerIndex];
+        updateStrikerReferences();
+      }
+      
       const description = `Run Out! ${outBatter.name} out, ${runs} run(s) completed`;
       current.commentary.push(`<b>${Math.floor(current.balls/6)}.${current.balls%6}:</b> ${description}`);
       
@@ -431,7 +454,7 @@ if (window.location.pathname.includes('live.html')) {
   window.closeRunOutModal = () => {
     const runOutModal = document.getElementById("runOutModal");
     runOutModal.style.display = "none";
-    document.getElementById("runOutRuns").value = "";
+    document.getElementById("runOutRuns").value = "0";
     document.getElementById("newBatterName").value = "";
     document.getElementById("outBatterSelect").selectedIndex = 0;
   };
@@ -486,7 +509,7 @@ if (window.location.pathname.includes('scorecard.html')) {
         </tr>`;
       }
 
-      const total = inn.totalRuns || 0;
+      const total = inn.runs || 0;
       const extras = inn.extras || 0;
       const wickets = inn.wickets || 0;
       
