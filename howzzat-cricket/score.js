@@ -150,6 +150,7 @@ if (window.location.pathname.includes('live.html')) {
         current.extras += runs;
       }
       else if (noball){
+        current.runs++;
         striker.runs += runs;
         bowler.runs += runs;
         current.extras++;
@@ -178,7 +179,7 @@ if (window.location.pathname.includes('live.html')) {
       }    
 
       // Odd runs logic
-      if (runs % 2 === 1) {
+      if (runs % 2 === 1 && !wide) {
         [current.strikerIndex, current.nonStrikerIndex] = [current.nonStrikerIndex, current.strikerIndex];
       }
 
